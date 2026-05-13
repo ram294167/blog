@@ -1,9 +1,9 @@
 import { initDatabase } from '@/db/init'
-import { listAllPosts } from '@/data/posts'
+import { listPublicPosts } from '@/data/posts'
 
 export async function GET() {
   await initDatabase()
-  const posts = await listAllPosts()
+  const posts = await listPublicPosts()
   return Response.json({ posts, currentTime: Date.now() })
 }
 
