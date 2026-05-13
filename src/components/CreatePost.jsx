@@ -36,24 +36,75 @@ export function CreatePost({ createPostAction }) {
     setAttachments(prev => ({ ...prev, voice: file }))
   }
 
+  const uploadAttachment = async (file, type) => {
+    const uploadData = new FormData()
+    uploadData.append('file', file)
+    uploadData.append('type', type)
+
+    const res = await fetch('/api/v1/upload', {
+      method: 'POST',
+      body: uploadData,
+    })
+
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => null)
+      throw new Error(errorData?.error || res.statusText)
+    }
+
+    return res.json()
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     setIsSubmitting(true)
 
     try {
-      const formData = new FormData(e.target)
-      formData.set('isPublic', isPublic.toString())
-      
-      if (attachments.image) formData.append('image', attachments.image)
-      if (attachments.video) formData.append('video', attachments.video)
-      if (attachments.voice) formData.append('voice', attachments.voice)
+      const form = e.target
+      const payload = {
+        title: form.title.value,
+        contents: form.contents.value,
+        isPublic,
+        image: null,
+        video: null,
+        voice: null,
+      }
 
-      await createPostAction(formData)
-      
+      if (attachments.image) {
+        const uploadedImage = await uploadAttachment(attachments.image, 'image')
+        payload.image = {
+          filename: uploadedImage.filename,
+          url: uploadedImage.url,
+          size: uploadedImage.size,
+          type: uploadedImage.type,
+        }
+      }
+
+      if (attachments.video) {
+        const uploadedVideo = await uploadAttachment(attachments.video, 'video')
+        payload.video = {
+          filename: uploadedVideo.filename,
+          url: uploadedVideo.url,
+          size: uploadedVideo.size,
+          type: uploadedVideo.type,
+        }
+      }
+
+      if (attachments.voice) {
+        const uploadedVoice = await uploadAttachment(attachments.voice, 'voice')
+        payload.voice = {
+          filename: uploadedVoice.filename,
+          url: uploadedVoice.url,
+          size: uploadedVoice.size,
+          type: uploadedVoice.type,
+        }
+      }
+
+      await createPostAction(payload)
+
       setAttachments({ image: null, video: null, voice: null })
       setPreviewImage(null)
       setIsPublic(false)
-      e.target.reset()
+      form.reset()
     } catch (error) {
       console.error('Error creating post:', error)
     } finally {
