@@ -26,6 +26,9 @@ export default async function ViewPostPage({ params }) {
       contents={post.contents}
       author={post.author}
       isPublic={post.isPublic}
+      image={post.image}
+      video={post.video}
+      voice={post.voice}
     />
   )
 }

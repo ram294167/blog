@@ -13,7 +13,16 @@ export function PostList({ posts = [] }) {
       ) : (
         posts.map((post) => (
           <Fragment key={`post-${post._id}`}>
-            <Post _id={post._id} title={post.title} author={post.author} />
+            <Post
+              _id={post._id}
+              title={post.title}
+              author={post.author}
+              isPublic={post.isPublic}
+              contents={post.contents}
+              image={post.image}
+              video={post.video}
+              voice={post.voice}
+            />
             <hr />
           </Fragment>
         ))
