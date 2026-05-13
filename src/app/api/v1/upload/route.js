@@ -1,6 +1,5 @@
-import { writeFile, mkdir } from 'fs/promises'
-import { join } from 'path'
 import { v4 as uuidv4 } from 'uuid'
+import { supabase, STORAGE_BUCKET } from '@/lib/supabaseClient'
 
 export async function POST(req) {
   try {
@@ -24,25 +23,42 @@ export async function POST(req) {
       return Response.json({ error: 'File too large' }, { status: 413 })
     }
 
-    const bytes = await file.arrayBuffer()
-    const buffer = Buffer.from(bytes)
-
-    // Create unique filename
-    const ext = file.name.split('.').pop()
+    const ext = file.name.split('.').pop() || 'bin'
     const filename = `${uuidv4()}.${ext}`
-    const dir = join(process.cwd(), 'public', 'uploads', type)
+    const storagePath = `${type}/${filename}`
+    const binary = Buffer.from(await file.arrayBuffer())
 
-    // Create directory if it doesn't exist
-    await mkdir(dir, { recursive: true })
+    const { error: uploadError } = await supabase.storage
+      .from(STORAGE_BUCKET)
+      .upload(storagePath, binary, {
+        contentType: file.type,
+        cacheControl: '3600',
+      })
 
-    // Write file
-    const filepath = join(dir, filename)
-    await writeFile(filepath, buffer)
+    if (uploadError) {
+      console.error('Supabase storage upload error:', uploadError)
+      return Response.json(
+        { error: 'Upload failed', details: uploadError.message },
+        { status: 500 }
+      )
+    }
+
+    const { data: publicUrlData, error: publicUrlError } = supabase.storage
+      .from(STORAGE_BUCKET)
+      .getPublicUrl(storagePath)
+
+    if (publicUrlError) {
+      console.error('Supabase public URL error:', publicUrlError)
+      return Response.json(
+        { error: 'Upload succeeded but public URL could not be generated' },
+        { status: 500 }
+      )
+    }
 
     return Response.json({
       success: true,
       filename,
-      url: `/uploads/${type}/${filename}`,
+      url: publicUrlData.publicUrl,
       size: file.size,
       type: file.type,
     })
@@ -55,5 +71,4 @@ export async function POST(req) {
   }
 }
 
-// Route segment config for Next.js 13+ App Router
 export const maxDuration = 60

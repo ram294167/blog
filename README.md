@@ -22,6 +22,23 @@ To install the dependencies:
 npm install
 ```
 
+## Environment Variables
+
+Create a `.env.local` file in the project root and add your local secrets.
+
+Example settings:
+
+```env
+SUPABASE_URL=https://your-project-ref.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+SUPABASE_STORAGE_BUCKET=uploads
+DATABASE_URL=mongodb://localhost:27017/blog
+JWT_SECRET=your-jwt-secret
+BASE_URL=http://localhost:3000
+```
+
+The project already includes `.env.example` as a template for these values.
+
 ## Start
 
 To start the app in development mode, run the following command:

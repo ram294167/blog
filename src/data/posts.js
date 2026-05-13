@@ -2,8 +2,16 @@ import 'server-only'
 import { unstable_cache as cache } from 'next/cache'
 import { Post } from '@/db/models'
 
-export async function createPost(userId, { title, contents, isPublic = false }) {
-  const post = new Post({ author: userId, title, contents, isPublic })
+export async function createPost(userId, { title, contents, isPublic = false, image = null, video = null, voice = null }) {
+  const post = new Post({
+    author: userId,
+    title,
+    contents,
+    isPublic,
+    image,
+    video,
+    voice,
+  })
   return await post.save()
 }
 

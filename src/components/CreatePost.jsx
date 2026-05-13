@@ -8,6 +8,7 @@ export function CreatePost({ createPostAction }) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [previewImage, setPreviewImage] = useState(null)
   const [isPublic, setIsPublic] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
   const [attachments, setAttachments] = useState({
     image: null,
     video: null,
@@ -56,6 +57,7 @@ export function CreatePost({ createPostAction }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setErrorMessage('')
     setIsSubmitting(true)
 
     try {
@@ -107,6 +109,7 @@ export function CreatePost({ createPostAction }) {
       form.reset()
     } catch (error) {
       console.error('Error creating post:', error)
+      setErrorMessage(error.message || 'Unable to create post. Please try again.')
     } finally {
       setIsSubmitting(false)
     }
@@ -223,6 +226,12 @@ export function CreatePost({ createPostAction }) {
             : 'This post will only be visible to you'}
         </small>
       </div>
+
+      {errorMessage && (
+        <div className='form-error'>
+          {errorMessage}
+        </div>
+      )}
 
       <button
         type='submit'
