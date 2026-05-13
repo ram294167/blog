@@ -89,7 +89,8 @@ export function Post({ _id, title, author, isPublic, contents, image, video, voi
         onClose={() => setModalImage(null)}
       />
     )}
-  )
+  </>
+)
 }
 
 Post.propTypes = {
