@@ -14,16 +14,31 @@ export function FullPost({ title, contents, author, isPublic, image, video, voic
 
       {image && image.url && (
         <div className='post-media post-image'>
-          <img src={image.url} alt={title} />
+          <img
+            src={image.url}
+            alt={title}
+            style={{ cursor: 'pointer', maxWidth: '100%', height: 'auto' }}
+            onClick={() => window.open(image.url, '_blank')}
+          />
+          <p className='media-link'>
+            <a href={image.url} target='_blank' rel='noopener noreferrer'>
+              View full image
+            </a>
+          </p>
         </div>
       )}
 
       {video && video.url && (
         <div className='post-media post-video'>
           <video controls style={{ width: '100%', borderRadius: '12px' }}>
-            <source src={video.url} />
+            <source src={video.url} type={video.type || 'video/mp4'} />
             Your browser does not support the video tag.
           </video>
+          <p className='media-link'>
+            <a href={video.url} target='_blank' rel='noopener noreferrer'>
+              Open video in new tab
+            </a>
+          </p>
         </div>
       )}
 
@@ -32,10 +47,15 @@ export function FullPost({ title, contents, author, isPublic, image, video, voic
           <div className='voice-player'>
             <span className='voice-icon'>🎙️</span>
             <audio controls style={{ flex: 1 }}>
-              <source src={voice.url} />
+              <source src={voice.url} type={voice.type || 'audio/mpeg'} />
               Your browser does not support the audio tag.
             </audio>
           </div>
+          <p className='media-link'>
+            <a href={voice.url} target='_blank' rel='noopener noreferrer'>
+              Open audio in new tab
+            </a>
+          </p>
         </div>
       )}
 

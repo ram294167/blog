@@ -17,10 +17,10 @@ export async function POST(req) {
       return Response.json({ error: 'Invalid file type' }, { status: 400 })
     }
 
-    // Check file size (limit to 50MB for now)
-    const maxSize = 50 * 1024 * 1024
+    // Check file size (limit to 150MB for now)
+    const maxSize = 150 * 1024 * 1024
     if (file.size > maxSize) {
-      return Response.json({ error: 'File too large' }, { status: 413 })
+      return Response.json({ error: 'File too large. Use a smaller video under 150MB.' }, { status: 413 })
     }
 
     const ext = file.name.split('.').pop() || 'bin'

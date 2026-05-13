@@ -4,11 +4,21 @@ import { useState } from 'react'
 import PropTypes from 'prop-types'
 import { VoiceRecorder } from './VoiceRecorder'
 
+const MAX_UPLOAD_SIZE = 150 * 1024 * 1024
+
+const formatBytes = (bytes) => {
+  if (!bytes) return '0 B'
+  const sizes = ['B', 'KB', 'MB', 'GB']
+  const i = Math.floor(Math.log(bytes) / Math.log(1024))
+  return `${parseFloat((bytes / Math.pow(1024, i)).toFixed(2))} ${sizes[i]}`
+}
+
 export function CreatePost({ createPostAction }) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [previewImage, setPreviewImage] = useState(null)
   const [isPublic, setIsPublic] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
+  const [uploadWarning, setUploadWarning] = useState('')
   const [attachments, setAttachments] = useState({
     image: null,
     video: null,
@@ -29,6 +39,15 @@ export function CreatePost({ createPostAction }) {
     const file = e.target.files?.[0]
     if (file) {
       setAttachments(prev => ({ ...prev, video: file }))
+      if (file.size > MAX_UPLOAD_SIZE) {
+        setUploadWarning(
+          `Selected video is too large (${formatBytes(file.size)}). Maximum allowed upload size is ${formatBytes(MAX_UPLOAD_SIZE)}.`
+        )
+      } else {
+        setUploadWarning(
+          `Selected video size: ${formatBytes(file.size)}. It will upload if below ${formatBytes(MAX_UPLOAD_SIZE)}.`
+        )
+      }
     }
   }
 
@@ -69,6 +88,14 @@ export function CreatePost({ createPostAction }) {
         image: null,
         video: null,
         voice: null,
+      }
+
+      if (attachments.video && attachments.video.size > MAX_UPLOAD_SIZE) {
+        setErrorMessage(
+          `Video is too large (${formatBytes(attachments.video.size)}). Please choose a video smaller than ${formatBytes(MAX_UPLOAD_SIZE)}.`
+        )
+        setIsSubmitting(false)
+        return
       }
 
       if (attachments.image) {
@@ -194,6 +221,11 @@ export function CreatePost({ createPostAction }) {
               {attachments.video ? `✓ ${attachments.video.name}` : 'Choose a video or drag here'}
             </span>
           </div>
+          {attachments.video && uploadWarning && (
+            <div className={`media-warning ${attachments.video.size > MAX_UPLOAD_SIZE ? 'danger' : 'info'}`}>
+              {uploadWarning}
+            </div>
+          )}
         </div>
 
         <div className='media-subsection'>
