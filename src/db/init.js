@@ -20,7 +20,6 @@ export async function initDatabase() {
     mongoose.set('strictQuery', false)
     globalWithMongoose.__mongoose.promise = mongoose.connect(process.env.DATABASE_URL, {
       dbName: 'blog',
-      keepAlive: true,
       autoIndex: true,
     }).then((mongooseInstance) => {
       return mongooseInstance
