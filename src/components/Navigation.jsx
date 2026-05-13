@@ -3,9 +3,10 @@ import PropTypes from 'prop-types'
 
 export function UserBar({ username, logoutAction }) {
   return (
-    <form action={logoutAction}>
+    <form className='user-bar' action={logoutAction}>
       <Link href='/create'>Create Post</Link> | Logged in as{' '}
-      <strong>{username}</strong> <button>Logout</button>
+      <strong>{username}</strong>
+      <button type='submit'>Logout</button>
     </form>
   )
 }

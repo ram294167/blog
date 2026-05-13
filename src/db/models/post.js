@@ -6,6 +6,7 @@ const postSchema = new Schema(
     title: { type: String, required: true },
     author: { type: Schema.Types.ObjectId, ref: 'user', required: true },
     contents: String,
+    isPublic: { type: Boolean, default: false },
   },
   { timestamps: true },
 )

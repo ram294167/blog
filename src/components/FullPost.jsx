@@ -1,8 +1,11 @@
 import PropTypes from 'prop-types'
 
-export function FullPost({ title, contents, author }) {
+export function FullPost({ title, contents, author, isPublic }) {
   return (
-    <article>
+    <article className='post-card'>
+      <div className={`post-visibility ${isPublic ? 'public' : 'private'}`}>
+        {isPublic ? 'Public' : 'Private'}
+      </div>
       <h3>{title}</h3>
       <div>{contents}</div>
       <br />
@@ -18,5 +21,6 @@ FullPost.propTypes = {
   author: PropTypes.shape({
     username: PropTypes.string.isRequired,
   }).isRequired,
+  isPublic: PropTypes.bool,
   contents: PropTypes.string,
 }

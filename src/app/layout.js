@@ -1,3 +1,4 @@
+import './globals.css'
 import { cookies } from 'next/headers'
 import { Inter } from 'next/font/google'
 import Image from 'next/image'
@@ -26,17 +27,20 @@ export default async function RootLayout({ children }) {
   return (
     <html lang='en' className={inter.className}>
       <body>
-        <Image
-          src={logo}
-          alt='Full-Stack Next.js Blog Logo'
-          width={500}
-          height={47}
-        />
-        <nav>
-          <Navigation username={user?.username} logoutAction={logoutAction} />
-        </nav>
-        <br />
-        <main>{children}</main>
+        <div className='page-shell'>
+          <header className='app-header'>
+            <Image
+              src={logo}
+              alt='Full-Stack Next.js Blog Logo'
+              width={320}
+              height={30}
+            />
+            <nav>
+              <Navigation username={user?.username} logoutAction={logoutAction} />
+            </nav>
+          </header>
+          <main className='app-main'>{children}</main>
+        </div>
       </body>
     </html>
   )

@@ -16,6 +16,7 @@ export default function CreatePostPage() {
     const post = await createPost(userId, {
       title: formData.get('title'),
       contents: formData.get('contents'),
+      isPublic: formData.get('isPublic') === 'true',
     })
     revalidateTag('posts')
     redirect(`/posts/${post._id}`)

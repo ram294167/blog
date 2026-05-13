@@ -2,16 +2,23 @@ import PropTypes from 'prop-types'
 
 export function CreatePost({ createPostAction }) {
   return (
-    <form action={createPostAction}>
-      <div>
-        <label htmlFor='title'>Title: </label>
+    <form className='form-card' action={createPostAction}>
+      <h2>Create Post</h2>
+      <div className='form-group'>
+        <label htmlFor='title'>Title</label>
         <input type='text' name='title' id='title' required />
       </div>
-      <br />
-      <textarea name='contents' id='contents' />
-      <br />
-      <br />
-      <input type='submit' value='Create' />
+      <div className='form-group'>
+        <label htmlFor='contents'>Contents</label>
+        <textarea name='contents' id='contents' required />
+      </div>
+      <div className='form-group'>
+        <label className='checkbox-label'>
+          <input type='checkbox' name='isPublic' value='true' />
+          Make this post public
+        </label>
+      </div>
+      <input type='submit' className='button-primary' value='Create Post' />
     </form>
   )
 }

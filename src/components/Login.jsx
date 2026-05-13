@@ -5,19 +5,18 @@ import PropTypes from 'prop-types'
 export function Login({ loginAction }) {
   const [state, formAction] = useFormState(loginAction, {})
   return (
-    <form action={formAction}>
-      <div>
-        <label htmlFor='username'>Username: </label>
-        <input type='text' name='username' id='username' />
+    <form className='form-card' action={formAction}>
+      <h2>Log In</h2>
+      <div className='form-group'>
+        <label htmlFor='username'>Username</label>
+        <input type='text' name='username' id='username' required />
       </div>
-      <br />
-      <div>
-        <label htmlFor='password'>Password: </label>
-        <input type='password' name='password' id='password' />
+      <div className='form-group'>
+        <label htmlFor='password'>Password</label>
+        <input type='password' name='password' id='password' required />
       </div>
-      <br />
-      <input type='submit' value='Log In' />
-      {state.error ? <strong> Error logging in: {state.error}</strong> : null}
+      <input type='submit' className='button-primary' value='Log In' />
+      {state.error ? <div className='form-error'>Error logging in: {state.error}</div> : null}
     </form>
   )
 }
