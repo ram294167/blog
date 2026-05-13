@@ -26,7 +26,6 @@ export default async function HomePage() {
     <section className='home-page'>
       <div className='page-intro'>
         <p className='page-tag'>{pageTag}</p>
-        <h1>Full-Stack Next.js Blog</h1>
         <p className='page-summary'>{pageSummary}</p>
       </div>
       <PostList posts={posts} />
