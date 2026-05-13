@@ -55,10 +55,8 @@ export async function POST(req) {
   }
 }
 
+// Route segment configuration for Next.js 13+
+export const maxDuration = 60
 export const config = {
-  api: {
-    bodyParser: {
-      sizeLimit: '50mb',
-    },
-  },
+  maxDuration: 60,
 }
