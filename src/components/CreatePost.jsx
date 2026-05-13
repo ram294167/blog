@@ -71,7 +71,7 @@ export function CreatePost({ createPostAction }) {
           type='text'
           name='title'
           id='title'
-          placeholder='What\'s on your mind?'
+          placeholder="What's on your mind?"
           required
           disabled={isSubmitting}
         />
