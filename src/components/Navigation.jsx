@@ -4,8 +4,7 @@ import PropTypes from 'prop-types'
 export function UserBar({ username, logoutAction }) {
   return (
     <form className='user-bar' action={logoutAction}>
-      <Link href='/create'>Create Post</Link> | Logged in as{' '}
-      <strong>{username}</strong>
+      <span className='user-info'>Logged in as <strong>{username}</strong></span>
       <button type='submit'>Logout</button>
     </form>
   )
@@ -18,22 +17,24 @@ UserBar.propTypes = {
 
 export function LoginSignupLinks() {
   return (
-    <div>
-      <Link href='/login'>Log In</Link> | <Link href='/signup'>Sign Up</Link>
+    <div className='auth-links'>
+      <Link href='/login'>Log In</Link>
+      <Link href='/signup'>Sign Up</Link>
     </div>
   )
 }
 
 export function Navigation({ username, logoutAction }) {
   return (
-    <>
+    <div className='site-nav'>
       <Link href='/'>Home</Link>
+      <Link href='/create'>Create Post</Link>
       {username ? (
         <UserBar username={username} logoutAction={logoutAction} />
       ) : (
         <LoginSignupLinks />
       )}
-    </>
+    </div>
   )
 }
 

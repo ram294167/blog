@@ -1,8 +1,6 @@
 import './globals.css'
 import { cookies } from 'next/headers'
 import { Inter } from 'next/font/google'
-import Image from 'next/image'
-import logo from './logo.png'
 import { getUserInfoByToken } from '@/data/users'
 import { Navigation } from '@/components/Navigation'
 
@@ -12,7 +10,7 @@ const inter = Inter({
 })
 
 export const metadata = {
-  title: 'Full-Stack Next.js Blog',
+  title: 'Next.js Blog',
   description: 'A blog about React and Next.js',
 }
 
@@ -29,12 +27,9 @@ export default async function RootLayout({ children }) {
       <body>
         <div className='page-shell'>
           <header className='app-header'>
-            <Image
-              src={logo}
-              alt='Full-Stack Next.js Blog Logo'
-              width={320}
-              height={30}
-            />
+            <div className='brand'>
+              <span>Next.js</span> Blog
+            </div>
             <nav>
               <Navigation username={user?.username} logoutAction={logoutAction} />
             </nav>
