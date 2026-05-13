@@ -31,13 +31,15 @@ Example settings:
 ```env
 SUPABASE_URL=https://your-project-ref.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
-SUPABASE_STORAGE_BUCKET=uploads
+SUPABASE_STORAGE_BUCKET=blog
 DATABASE_URL=mongodb://localhost:27017/blog
 JWT_SECRET=your-jwt-secret
 BASE_URL=http://localhost:3000
 ```
 
 The project already includes `.env.example` as a template for these values.
+
+> Important: Create the storage bucket named in `SUPABASE_STORAGE_BUCKET` in your Supabase project under Storage. If your bucket is not named `blog`, update the env variable to the exact bucket name used in Supabase.
 
 ## Start
 

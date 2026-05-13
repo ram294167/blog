@@ -37,8 +37,14 @@ export async function POST(req) {
 
     if (uploadError) {
       console.error('Supabase storage upload error:', uploadError)
+      const bucketError = uploadError.message?.includes('Bucket not found')
       return Response.json(
-        { error: 'Upload failed', details: uploadError.message },
+        {
+          error: bucketError
+            ? 'Supabase bucket not found. Check SUPABASE_STORAGE_BUCKET and create that bucket in Supabase Storage.'
+            : 'Upload failed',
+          details: uploadError.message,
+        },
         { status: 500 }
       )
     }
