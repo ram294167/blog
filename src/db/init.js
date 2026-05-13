@@ -30,3 +30,5 @@ export async function initDatabase() {
   globalWithMongoose.__mongoose.conn = await globalWithMongoose.__mongoose.promise
   return globalWithMongoose.__mongoose.conn
 }
+
+export { initDatabase as connectDB }
