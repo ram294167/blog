@@ -1,8 +1,13 @@
+'use client'
+
+import { useState } from 'react'
 import PropTypes from 'prop-types'
 import Link from 'next/link'
 import slug from 'slug'
+import { ImageModal } from './ImageModal'
 
 export function Post({ _id, title, author, isPublic, contents, image, video, voice }) {
+  const [modalImage, setModalImage] = useState(null)
   const hasMedia = image || video || voice
   const mediaTypes = []
   if (image) mediaTypes.push('📸')
@@ -26,15 +31,19 @@ export function Post({ _id, title, author, isPublic, contents, image, video, voi
 
       {image && image.url ? (
         <div className='post-media-preview post-image-preview'>
-          <a href={image.url} target='_blank' rel='noopener noreferrer'>
-            <img
-              src={image.url}
-              alt={title}
-              style={{ maxWidth: '100%', height: 'auto', borderRadius: '12px' }}
-            />
-          </a>
+          <img
+            src={image.url}
+            alt={title}
+            style={{ maxWidth: '100%', height: 'auto', borderRadius: '12px', cursor: 'pointer' }}
+            onClick={() => setModalImage(image.url)}
+          />
           <p>
-            <a href={image.url} target='_blank' rel='noopener noreferrer'>View image</a>
+            <button
+              className='view-image-btn'
+              onClick={() => setModalImage(image.url)}
+            >
+              View image
+            </button>
           </p>
         </div>
       ) : null}
@@ -72,6 +81,12 @@ export function Post({ _id, title, author, isPublic, contents, image, video, voi
         </div>
       </div>
     </article>
+
+    <ImageModal
+      src={modalImage}
+      alt={title}
+      onClose={() => setModalImage(null)}
+    />
   )
 }
 

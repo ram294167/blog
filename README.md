@@ -1,94 +1,159 @@
-# Modern Full-Stack React Projects / Chapter 19
+# Next.js Blog
 
-_Deploying a Next.js App_
+A modern full-stack blog application built with Next.js 14, featuring user authentication, post creation with media uploads, and deployment to Vercel.
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Features
 
-## Requirements
+- User registration and login
+- Create public or private posts
+- Upload images, videos, and audio files
+- Responsive design with dark theme
+- MongoDB for data storage
+- Supabase Storage for media files
+- Deployed on Vercel
 
-Please install the following, if you do not already have them installed:
+## Tech Stack
 
-- Node.js v20.10.0
-- Git v2.43.0
-- Visual Studio Code v1.84.2
+- **Frontend**: Next.js 14 (App Router), React, CSS
+- **Backend**: Next.js API Routes
+- **Database**: MongoDB with Mongoose
+- **Storage**: Supabase Storage
+- **Authentication**: JWT tokens
+- **Deployment**: Vercel
 
-The versions listed above are the ones used in the book. While installing a newer version should not be an issue, please note that certain steps might work differently on a newer version. If you are having an issue with the code and steps provided in this book, please try using the mentioned versions.
+## Prerequisites
 
-## Install
+- Node.js v20.10.0 or later
+- Git
+- MongoDB Atlas account (or local MongoDB)
+- Supabase account
 
-To install the dependencies:
+## Installation
 
-```bash
-npm install
-```
+1. Clone the repository:
+   ```bash
+   git clone <your-repo-url>
+   cd ch19-deploy-nextjs
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Set up environment variables (see below)
+
+4. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+Open [http://localhost:3000](http://localhost:3000) to view the app.
 
 ## Environment Variables
 
-Create a `.env.local` file in the project root and add your local secrets.
-
-Example settings:
+Create a `.env.local` file in the root directory with the following variables:
 
 ```env
+# Database
+DATABASE_URL=mongodb+srv://user:password@cluster.mongodb.net/blog?retryWrites=true&w=majority
+
+# Authentication
+JWT_SECRET=your-secure-jwt-secret-here
+
+# Supabase Storage
 SUPABASE_URL=https://your-project-ref.supabase.co
-SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+SUPABASE_SERVICE_ROLE_KEY=your-supabase-service-role-key
 SUPABASE_STORAGE_BUCKET=blog
-DATABASE_URL=mongodb://localhost:27017/blog
-JWT_SECRET=your-jwt-secret
+
+# App
 BASE_URL=http://localhost:3000
 ```
 
-The project already includes `.env.example` as a template for these values.
+### Supabase Setup
 
-> Important: Create the storage bucket named in `SUPABASE_STORAGE_BUCKET` in your Supabase project under Storage. If your bucket is not named `blog`, update the env variable to the exact bucket name used in Supabase.
+1. Create a new project at [supabase.com](https://supabase.com)
+2. Go to Storage in your Supabase dashboard
+3. Create a new bucket named `blog`
+4. Make the bucket public (uncheck "Private bucket")
+5. Go to Settings > API to get your project URL and service role key
 
-## Start
+### MongoDB Setup
 
-To start the app in development mode, run the following command:
+1. Create a MongoDB Atlas cluster or use local MongoDB
+2. Get your connection string
+3. Update `DATABASE_URL` in `.env.local`
 
-```bash
-npm run dev
-```
+## Database Schema
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The app uses MongoDB with the following collections:
 
-## Learn More
+- `users`: User accounts with username, email, password hash
+- `posts`: Blog posts with title, content, media URLs, visibility
 
-To learn more about Next.js, take a look at the following resources:
+## Deployment
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Vercel Deployment
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+1. Push your code to GitHub
+2. Connect your repo to Vercel
+3. Add environment variables in Vercel project settings:
+   - `DATABASE_URL`
+   - `JWT_SECRET`
+   - `SUPABASE_URL`
+   - `SUPABASE_SERVICE_ROLE_KEY`
+   - `SUPABASE_STORAGE_BUCKET`
+   - `BASE_URL` (set to your Vercel domain)
+4. Deploy
 
-## Deploy on Vercel
+### Docker Deployment
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-
-## Deploy via Docker
-
-To deploy our app via Docker, we first need to build the Docker image by running the following command:
+Build and run with Docker:
 
 ```bash
 docker build \
-  -t blog-nextjs \
-  --build-arg "DATABASE_URL=mongodb://host.docker.internal:27017/blog" \
-  --build-arg "JWT_SECRET=replace-with-random-secret" \
+  -t nextjs-blog \
+  --build-arg "DATABASE_URL=your-mongo-url" \
+  --build-arg "JWT_SECRET=your-jwt-secret" \
+  --build-arg "SUPABASE_URL=your-supabase-url" \
+  --build-arg "SUPABASE_SERVICE_ROLE_KEY=your-service-key" \
+  --build-arg "SUPABASE_STORAGE_BUCKET=blog" \
   --build-arg "BASE_URL=http://localhost:3000" \
   .
+
+docker run -p 3000:3000 nextjs-blog
 ```
 
-Now, we can start a new container, as follows:
+## Usage
 
-```bash
-docker run \
-  -d \
-  --name blog-app \
-  -p 3000:3000 \
-  -e "DATABASE_URL=mongodb://host.docker.internal:27017/blog" \
-  -e "JWT_SECRET=replace-with-random-secret" \
-  -e "BASE_URL=http://localhost:3000" \
-  --restart unless-stopped \
-  blog-nextjs
-```
+1. Register a new account or log in
+2. Create posts with text content and optional media
+3. View posts on the home page
+4. Click post titles to view full posts with media
+
+## API Routes
+
+- `POST /api/v1/auth/signup` - User registration
+- `POST /api/v1/auth/login` - User login
+- `GET /api/v1/posts` - Get posts (with visibility filtering)
+- `POST /api/v1/posts` - Create new post
+- `POST /api/v1/upload` - Upload media files
+
+## Development
+
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
+
+## License
+
+This project is for educational purposes. See the book "Modern Full-Stack React Projects" for more details.
