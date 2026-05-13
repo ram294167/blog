@@ -27,6 +27,7 @@ export default async function HomePage() {
       <div className='page-intro'>
         <p className='page-tag'>{pageTag}</p>
         <p className='page-summary'>{pageSummary}</p>
+        <p className='debug-info'>Found {posts.length} posts</p>
       </div>
       <PostList posts={posts} />
     </section>

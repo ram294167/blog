@@ -7,6 +7,7 @@ import { VoiceRecorder } from './VoiceRecorder'
 export function CreatePost({ createPostAction }) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [previewImage, setPreviewImage] = useState(null)
+  const [isPublic, setIsPublic] = useState(false)
   const [attachments, setAttachments] = useState({
     image: null,
     video: null,
@@ -41,6 +42,7 @@ export function CreatePost({ createPostAction }) {
 
     try {
       const formData = new FormData(e.target)
+      formData.set('isPublic', isPublic.toString())
       
       if (attachments.image) formData.append('image', attachments.image)
       if (attachments.video) formData.append('video', attachments.video)
@@ -50,6 +52,7 @@ export function CreatePost({ createPostAction }) {
       
       setAttachments({ image: null, video: null, voice: null })
       setPreviewImage(null)
+      setIsPublic(false)
       e.target.reset()
     } catch (error) {
       console.error('Error creating post:', error)
@@ -152,9 +155,22 @@ export function CreatePost({ createPostAction }) {
 
       <div className='form-group checkbox-group'>
         <label className='checkbox-label'>
-          <input type='checkbox' name='isPublic' value='true' disabled={isSubmitting} />
-          <span>Make this post public</span>
+          <input 
+            type='checkbox' 
+            name='isPublic' 
+            checked={isPublic}
+            onChange={(e) => setIsPublic(e.target.checked)}
+            disabled={isSubmitting} 
+          />
+          <span className='checkbox-status'>
+            {isPublic ? '🌐 Public - Everyone can see' : '🔒 Private - Only you can see'}
+          </span>
         </label>
+        <small className='checkbox-hint'>
+          {isPublic 
+            ? 'This post will be visible to all logged-in users' 
+            : 'This post will only be visible to you'}
+        </small>
       </div>
 
       <button
