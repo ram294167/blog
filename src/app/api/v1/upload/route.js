@@ -55,8 +55,5 @@ export async function POST(req) {
   }
 }
 
-// Route segment configuration for Next.js 13+
+// Route segment config for Next.js 13+ App Router
 export const maxDuration = 60
-export const config = {
-  maxDuration: 60,
-}
