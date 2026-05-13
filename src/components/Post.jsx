@@ -82,11 +82,13 @@ export function Post({ _id, title, author, isPublic, contents, image, video, voi
       </div>
     </article>
 
-    <ImageModal
-      src={modalImage}
-      alt={title}
-      onClose={() => setModalImage(null)}
-    />
+    {modalImage && (
+      <ImageModal
+        src={modalImage}
+        alt={title}
+        onClose={() => setModalImage(null)}
+      />
+    )}
   )
 }
 
