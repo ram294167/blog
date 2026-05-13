@@ -24,7 +24,40 @@ export function Post({ _id, title, author, isPublic, contents, image, video, voi
         </div>
       )}
 
-      {hasMedia && (
+      {image && image.url ? (
+        <div className='post-media-preview post-image-preview'>
+          <a href={image.url} target='_blank' rel='noopener noreferrer'>
+            <img
+              src={image.url}
+              alt={title}
+              style={{ maxWidth: '100%', height: 'auto', borderRadius: '12px' }}
+            />
+          </a>
+          <p>
+            <a href={image.url} target='_blank' rel='noopener noreferrer'>View image</a>
+          </p>
+        </div>
+      ) : null}
+
+      {video && video.url ? (
+        <div className='post-media-preview post-video-preview'>
+          <div className='media-label'>🎬 Video attached</div>
+          <p>
+            <a href={video.url} target='_blank' rel='noopener noreferrer'>Open video</a>
+          </p>
+        </div>
+      ) : null}
+
+      {voice && voice.url ? (
+        <div className='post-media-preview post-audio-preview'>
+          <div className='media-label'>🎙️ Audio attached</div>
+          <p>
+            <a href={voice.url} target='_blank' rel='noopener noreferrer'>Open audio</a>
+          </p>
+        </div>
+      ) : null}
+
+      {!image?.url && !video?.url && !voice?.url && hasMedia && (
         <div className='post-media-preview'>
           <span className='media-indicators'>
             {mediaTypes.join(' ')} Media attached
@@ -32,9 +65,12 @@ export function Post({ _id, title, author, isPublic, contents, image, video, voi
         </div>
       )}
 
-      <em>
-        Written by <strong>{author.username}</strong>
-      </em>
+      <div className='post-footer'>
+        <em>Written by <strong>{author.username}</strong></em>
+        <div className='view-post-link'>
+          <Link href={`/posts/${_id}/${slug(title)}`}>View post</Link>
+        </div>
+      </div>
     </article>
   )
 }
